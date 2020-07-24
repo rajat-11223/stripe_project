@@ -4,7 +4,7 @@
 <div class= "col-md-6">
  <div class="border_donation">
  <h4 class="text-center text-black mt-3">Make Donation</h4> 
-<h5 class="text-center text-black "> To make payment, Sign In here </h5>
+<h5 class="text-center text-black "> Welcome <%= current_user.name.capitalize %></h5>
    <div class="container-fluid">
     <div class="row price_btns">
     
@@ -91,4 +91,9 @@ function isNumber(evt) {
     return true;
 }
 
+</script>
+<script type="text/javascript">
+  $(".close").click(function(){
+  $(".flash_notification").hide();
+  
 </script>

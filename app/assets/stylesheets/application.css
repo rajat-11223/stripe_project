@@ -354,6 +354,16 @@ a{
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
 } 
+#edit_user input{
+width: 100%;
+display: block;
+margin: 20px 0;
+padding: 15px;
+border: 1px solid #b5b5b5;
+outline: none;
+border-radius: 4px;
+	
+}
 
 #payment-form button {
   background: #5469d4;
@@ -379,5 +389,8 @@ margin-left: 17px;
   cursor: default;
 }
 
-
+.col-md-6.border_edit {
+	border: 1px solid;
+	margin-top: 10%;
+}
     
