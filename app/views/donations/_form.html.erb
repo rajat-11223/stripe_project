@@ -1,0 +1,94 @@
+<div class="container">
+<div class="row">
+<div class= "col-md-3"></div>
+<div class= "col-md-6">
+ <div class="border_donation">
+ <h4 class="text-center text-black mt-3">Make Donation</h4> 
+<h5 class="text-center text-black "> To make payment, Sign In here </h5>
+   <div class="container-fluid">
+    <div class="row price_btns">
+    
+      <button class="btn text-white bg-blue fbutton" type="text">$10</button>
+    
+      <button class="btn text-white bg-blue fbutton" type="text">$15</button>
+   
+      <button class="btn text-white bg-blue fbutton" type="text">$20</button>
+    
+      <button class="btn text-white bg-blue fbutton" type="text">$25</button>
+    
+    </div>
+  </div>
+ 
+<!-- <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+  data-key="pk_test_8aNH9uOjNiKBIYbS8oJe9WWu"
+  data-description="A month's subscription"
+  data-amount="100"
+  data-locale="auto"></script> -->
+
+
+
+<%= form_with(model: donation, local: true,id: "payment-form") do |f| %>
+<!-- <form action="/charge" method="post" id="payment-form"> -->
+  
+   <div class="form-group pd-row">
+    <span class="dollar">$</span>
+   <%= f.text_field :amount,placeholder: "Amount", maxlength:"5", onkeypress: "return isNumber(event)",required: "true" %>
+</div>
+  <div class="form-row">
+    
+<!-- Used to display form errors. -->
+    <br><div id="card-errors" role="alert"></div>
+    <div id="card-element">
+      <!-- A Stripe Element will be inserted here. -->
+    </div>
+
+    
+  </div>
+
+  <button class="sub_btnn">Pay Now</button>
+<!-- </form> -->
+<% end %>
+
+    </div>
+</div>
+<div class= "col-md-3"></div>
+
+
+
+</div>
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+  
+$(document).ready(function(){
+  $(".fbutton").click(function (e) {
+$(this).addClass("fcurrent").siblings().removeClass("fcurrent");
+var a = $(this).text();
+var numberPattern = /\d+/g;
+var amount = a.match(numberPattern);
+$('#donation_amount').val(amount);
+});
+
+$(".sub_btnn").click(function (e) {
+ var amount_value = $('#donation_amount').val(amount);
+
+});
+
+});
+
+
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+</script>

@@ -1,0 +1,2 @@
+class ChargeCard < ApplicationRecord
+end

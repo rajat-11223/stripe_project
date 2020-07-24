@@ -1,0 +1,70 @@
+<!-- <h2>Sign usp</h2>
+
+<%#= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%#= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field">
+    <%#= f.label :email %><br />
+    <#%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%#= f.label :password %>
+    <%# if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <%# end %><br />
+    <%#= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%#= f.label :password_confirmation %><br />
+    <%#= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%#= f.submit "Sign up" %>
+  </div>
+<%# end %>
+
+<%#= render "devise/shared/links" %>
+ -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<div class="bg_img">
+ <div class="login-reg-panel">
+    
+              
+    <div class="register-info-box">
+       <h2>Have an account?</h2>
+      <%= link_to 'LogIn'.html_safe, 
+            user_session_path,id: "label-login" %>
+     
+    </div>
+              
+    <div class="white-panel">
+      <div class="login-show show-log-panel">
+        <h2>Sign Up</h2>
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <%= render "users/shared/error_messages", resource: resource %>
+        <%= f.text_field :name,placeholder: "Name" %>
+       <%= f.email_field :email, autofocus: true, autocomplete: "email",placeholder: "Email",class: "email_length" %>
+        <%if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password", placeholder: "Password" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Confirm-Password" %>
+         <%= f.submit "Sign up", class: 'btn_submit' %>
+        <% end %>
+       <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+      </div>
+      <div class="register-show">
+        <h2>REGISTER</h2>
+        <input type="text" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <input type="password" placeholder="Confirm Password">
+        <input type="button" value="Register">
+      </div>
+    </div>
+  </div>
+</div>
+

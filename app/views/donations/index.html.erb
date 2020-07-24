@@ -1,0 +1,28 @@
+<div class="container mt-5">
+<% if user_signed_in? %>
+<center><h4> <%= current_user.name.capitalize  %> Donations  </h4></center>
+<% else %>
+<center><h4> All Donations</h4></center>
+<% end %>
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th>S.no</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+     <% @donations.each do |tt| %>
+      <tr>
+        <td><%= tt.id %></td>
+        <td><%= tt.user.name.capitalize%></td>
+        <td><%= tt.user.email %></td>
+        <td><%= tt.amount %></td>
+      </tr>
+      <% end %>
+ </tbody>
+  </table>
+</div>
+

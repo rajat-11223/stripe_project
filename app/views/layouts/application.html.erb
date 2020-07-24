@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>StoreProject</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+ <% flash.each do |key, value| %>
+<div class="container top_notification dash_notify">
+      <center class="flash_notification"><div class="<%= flash_class(key) %>">
+            <%= value %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+      </div></center>
+      </div>
+<% end %>
+
+     <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+  <a class="navbar-brand" href="<%= root_url %>">
+    <img src="/assets/logo.png" alt="logo" style="width:150px;">
+  </a>
+  
+  <!-- Links -->
+  <ul class="navbar-nav justify-content-center nav-right">
+    <% if !user_signed_in? %>
+    <li class="nav-item">
+      <%= link_to '<i class="fa fa-user-circle-o"></i> Sign In'.html_safe, 
+            user_session_path,class: "nav-link" %>
+      
+    </li>
+    <li class="nav-item">
+      <%= link_to '<i class="fa fa-user-circle-o"></i> Sign Up'.html_safe, 
+            new_user_registration_path,class: "nav-link" %>
+      
+    </li>
+    <% else %>
+    
+   <li class="nav-item">
+     <%= link_to 'New Donation'.html_safe, new_donation_path, class: "nav-link mr-4 btn btn-danger" %>
+    </li>
+   
+    <li class="nav-item">
+     <%= link_to '<i class="fa fa-sign-out"></i> Log Out'.html_safe, "/users/sign_out", method: :delete, class: "nav-link btn btn-danger" %>
+    </li>
+    <% end %>
+  </ul>
+</nav> 
+    <%= yield %>
+  </body>
+</html>
