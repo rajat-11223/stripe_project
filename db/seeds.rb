@@ -7,3 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
+#------------create Master Role------------#
+puts "-------Started Adding Roles to table----"
+MasterRole.create(name:'admin')
+MasterRole.create(name:'user')
+puts "=--------Role Created Successfully------"
