@@ -4,6 +4,7 @@
 <% else %>
 <center><h4> All Donations</h4></center>
 <% end %>
+<%if @donations.present? %>
 <table class="table">
     <thead class="thead-dark">
       <tr>
@@ -14,6 +15,7 @@
       </tr>
     </thead>
     <tbody>
+      
      <% @donations.each do |tt| %>
       <tr>
         <td><%= tt.id %></td>
@@ -22,7 +24,21 @@
         <td><%= tt.amount %></td>
       </tr>
       <% end %>
+     
  </tbody>
   </table>
+ <% else %>
+  <div class="container">
+    <div class="row ">
+      <div class="col-md-3"></div>
+    <div class="col-md-6 mg_border">
+<center><h5>No Donation Available</h5> Click here for </center>
+<%= link_to 'New Donation'.html_safe, new_donation_path, class: "nav-link mr-4 btn btn-danger" %>
+</div>
+ <div class="col-md-3"></div>
+</div>
+</div>
+      <% end %>
+
 </div>
 

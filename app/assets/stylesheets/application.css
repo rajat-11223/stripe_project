@@ -324,7 +324,11 @@ a{
   color:#2c7715;
 }
     
-
+.mg_border {
+	border: 1px solid;
+	margin-top: 36px;
+	padding: 40px;
+}
 .StripeElement {
   box-sizing: border-box;
   height: 40px;
