@@ -1,0 +1,159 @@
+<div class="container">
+<div class="row">
+<div class= "col-md-3"></div>
+<div class= "col-md-6">
+ <div class="border_donation">
+ <h4 class="text-center text-black mt-3">Make Donation</h4> 
+<h5 class="text-center text-black "> Welcome <%= current_user.name.capitalize %></h5>
+   <div class="container-fluid">
+    <div class="row price_btns">
+    
+      <button class="btn text-white bg-blue new_btn" type="text">$10</button>
+    
+      <button class="btn text-white bg-blue new_btn " type="text">$15</button>
+   
+      <button class="btn text-white bg-blue new_btn" type="text">$20</button>
+    
+      <button class="btn text-white bg-blue new_btn" type="text">$25</button>
+    
+    </div>
+  </div>
+ 
+<form action="/donations" method="post" id="payment-form">
+ <!-- <form id="payment-form"> -->
+  <center><strong><p> Pay Donation Amount of $ <%= @amount.to_i.round(2) / 100.to_i %></p></strong></center>
+<br><div id="card-errors" role="alert"></div>
+<div class="form-row">
+<!-- Used to display form errors. -->  
+    <div id="card-element">
+      <!-- A Stripe Element will be inserted here. -->
+    </div>
+    <input type="hidden" id="payment_intent_client_secret" name="secret_intent" value='<%= @intent.client_secret %>'>   
+  </div>
+
+  <button type="submit" class="sub_btnn">Pay Now</button>
+</form>
+<%# end %>
+
+    </div>
+</div>
+<div class= "col-md-3"></div>
+
+
+
+</div>
+
+</div>
+
+<script type="text/javascript">
+var stripe = Stripe('pk_test_8aNH9uOjNiKBIYbS8oJe9WWu');
+document.querySelector(".sub_btnn").disabled = true;
+// Create an instance of Elements.
+var elements = stripe.elements();
+
+// Custom styling can be passed to options when creating an Element.
+// (Note that this demo uses a wider set of styles than the guide below.)
+var style = {
+  base: {
+    color: '#32325d',
+    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+    fontSmoothing: 'antialiased',
+    fontSize: '16px',
+    '::placeholder': {
+      color: '#aab7c4'
+    }
+  },
+  invalid: {
+    color: '#fa755a',
+    iconColor: '#fa755a'
+  }
+};
+
+// Create an instance of the card Element.
+var card = elements.create('card', {style: style});
+
+
+// Add an instance of the card Element into the `card-element` <div>.
+card.mount('#card-element');
+
+
+
+  // Handle real-time validation errors from the card Element.
+card.on('change', function(event) {
+   document.querySelector(".sub_btnn").disabled = event.empty;
+  var displayError = document.getElementById('card-errors');
+  if (event.error) {
+    displayError.textContent = event.error.message;
+    document.querySelector(".sub_btnn").disabled = event.error.message;
+  } else {
+    displayError.textContent = '';
+  }
+});
+
+
+$('.sub_btnn').on('click', function(event) {
+  $(".sub_btnn").attr('disabled','disabled');
+  //document.querySelector(".sub_btnn").disabled;
+  event.preventDefault();
+
+  stripe.createToken(card).then(function(result) {
+    if (result.error) {
+      // Inform the user if there was an error.
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+      $(".sub_btnn").removeAttr('disabled');
+    }
+
+     else
+
+      {
+
+     stripe.confirmCardPayment($('#payment_intent_client_secret').val(), {
+       payment_method: {
+         card: card,
+         billing_details: {
+           name: '<%= current_user.name %>',
+         }
+       }
+     })
+     .then(function(result) {
+        processPaymentCallback(result)
+     });
+     return false;
+
+
+}
+
+ });
+});
+
+
+function processPaymentCallback(result){
+      if(result.error)
+      {
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+        $(".sub_btnn").removeAttr('disabled');
+      }
+      else 
+      {
+          
+       var $formdata = $('#payment-form');
+       var alldata = $formdata.serialize();
+        //alert('data added successfully')
+        $.ajax({
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          method: 'post',
+          dataType:'script',
+          url: '<%=  submit_donation_path %>',
+          data:  {amount: result.paymentIntent.amount, payment_id: result.paymentIntent.id,payment_method: result.paymentIntent.payment_method,client_secret: result.paymentIntent.client_secret}
+
+        })
+
+        
+      }
+  }
+
+
+
+</script>

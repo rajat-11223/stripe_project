@@ -12,6 +12,7 @@
         <th>Name</th>
         <th>Email</th>
         <th>Amount</th>
+        <%= current_user.present? && current_user.master_role_id == ADMINROLE::ADMINID ?  '<th>Action</th>'.html_safe : '' %>
       </tr>
     </thead>
     <tbody>
@@ -21,7 +22,12 @@
         <td><%= tt.id %></td>
         <td><%= tt.user.name.capitalize%></td>
         <td><%= tt.user.email %></td>
-        <td><%= tt.amount %></td>
+        <td>$ <%= tt.amount %></td>
+        <td><%= button_to "Refund", refund_popup_path(id: tt.id), method: :post,remote: :true,class: "btn btn-primary" %></td>
+        <%#= current_user.present? && current_user.master_role_id == ADMINROLE::ADMINID ?  '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Open modal
+  </button> </td>'.html_safe  : '' %>
+        
       </tr>
       <% end %>
      
@@ -41,6 +47,39 @@
       <% end %>
 
 </div>
+
+  <!-- The Modal -->
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Refund Donation</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <%= form_tag refund_donation_path, remote: :true do %>
+         <%#= @refund_donation.amount %>
+         <%= hidden_field_tag :charge_id %>
+          <%= text_field_tag :amount, nil, :required => true %><br>
+           <%= submit_tag "Refund",class:"btn btn-primary" %>
+
+          <% end %>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
 
 <script type="text/javascript">
   $(".close").click(function(){

@@ -1,89 +1,101 @@
 
 <div class="bg_blue">
-<%= render 'form', donation: @donation %>
+<%#= render 'form', donation: @donation %>
+<div class="render_form">
+<div class="container">
+<div class="row">
+<div class= "col-md-3"></div>
+<div class= "col-md-6">
+ <div class="border_donation">
+ <h4 class="text-center text-black mt-3">Make Donation</h4> 
+<h5 class="text-center text-black "> Welcome <%= current_user.name.capitalize %></h5>
+   <div class="container-fluid">
+    <div class="row price_btns">
+    
+      <button class="btn text-white bg-blue fbutton" type="text">$10</button>
+    
+      <button class="btn text-white bg-blue fbutton" type="text">$15</button>
+   
+      <button class="btn text-white bg-blue fbutton" type="text">$20</button>
+    
+      <button class="btn text-white bg-blue fbutton" type="text">$25</button>
+    
+    </div>
+  </div>
+
+ <div class="form-group pd-row">
+ 	<p> Donation Amount </p>
+ 	<p class="error dis_none">* Please select amount</p>
+    <span class="dollar">$</span>
+   <%#= f.text_field :amount,placeholder: "Amount", maxlength:"5", onkeypress: "return isNumber(event)",required: "true" %>
+
+   <input type="text" id="donation_amount" onkeypress= "return isNumber(event)" required= "true" maxlength="5" >
+</div>
+<div class="col-md-12 text-center">
+<cenetr><button  class="btn btn-primary submt_btun">Proceed to Payment</button></cenetr>
+</div>
+</div>
+</div>
+<div class= "col-md-3"></div>
+</div>
+</div>
+</div>
 </div>
 
+<script src="https://js.stripe.com/v3/"></script>
 
 <script type="text/javascript">
-// Create a Stripe client.
-
-
+  
 $(document).ready(function(){
-var stripe = Stripe('pk_test_8aNH9uOjNiKBIYbS8oJe9WWu');
-document.querySelector(".sub_btnn").disabled = true;
-// Create an instance of Elements.
-var elements = stripe.elements();
-
-// Custom styling can be passed to options when creating an Element.
-// (Note that this demo uses a wider set of styles than the guide below.)
-var style = {
-  base: {
-    color: '#32325d',
-    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#aab7c4'
-    }
-  },
-  invalid: {
-    color: '#fa755a',
-    iconColor: '#fa755a'
-  }
-};
-
-// Create an instance of the card Element.
-var card = elements.create('card', {style: style});
-
-// Add an instance of the card Element into the `card-element` <div>.
-card.mount('#card-element');
-
-// Handle real-time validation errors from the card Element.
-card.on('change', function(event) {
-	 document.querySelector(".sub_btnn").disabled = event.empty;
-  var displayError = document.getElementById('card-errors');
-  if (event.error) {
-    displayError.textContent = event.error.message;
-  } else {
-    displayError.textContent = '';
-  }
+  $(".fbutton").click(function (e) {
+$(this).addClass("fcurrent").siblings().removeClass("fcurrent");
+var a = $(this).text();
+var numberPattern = /\d+/g;
+var amount = a.match(numberPattern);
+$('#donation_amount').val(amount);
 });
 
-// Handle form submission.
-var form = document.getElementById('payment-form');
-form.addEventListener('submit', function(event) {
-  event.preventDefault();
-
-  stripe.createToken(card).then(function(result) {
-    if (result.error) {
-      // Inform the user if there was an error.
-      var errorElement = document.getElementById('card-errors');
-      errorElement.textContent = result.error.message;
-    } else {
-      // Send the token to your server.
-      stripeTokenHandler(result.token);
-    }
-  });
-});
-
-
+$(".sub_btnn").click(function (e) {
+ var amount_value = $('#donation_amount').val(amount);
 
 });
-// Submit the form with the token ID.
-function stripeTokenHandler(token) {
-  // Insert the token ID into the form so it gets submitted to the server
-  var form = document.getElementById('payment-form');
-  var hiddenInput = document.createElement('input');
-  hiddenInput.setAttribute('type', 'hidden');
-  hiddenInput.setAttribute('name', 'stripeToken');
-  hiddenInput.setAttribute('value', token.id);
-  form.appendChild(hiddenInput);
 
-  // Submit the form
-  form.submit();
+});
+
+$(".submt_btun").click(function (e) {
+var amount_donate = $('#donation_amount').val();
+
+if (amount_donate == "")
+{
+  $(".error").removeClass("dis_none");
+}
+else
+{
+
+  $(".error").addClass("dis_none");
+  $.ajax({
+  	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+    type:'post',
+    dataType:'script',
+    url: '<%= proceed_donation_path %>',
+    data: {amount: amount_donate}
+    });
+
 }
 
+});
 
+
+
+
+
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
 
 </script>
-

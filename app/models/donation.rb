@@ -14,7 +14,7 @@ belongs_to :user
 def save_card_details(source, customer,user_id)
     
 @carddetails = Stripe::Customer.retrieve_source(customer, source)
-@savecard = ChargeCard.create(user_id: user_id, card_id: source,last_4: @carddetails.last4, exp_month: @carddetails.exp_month,exp_year: @carddetails.exp_year,card_type: @carddetails.brand)
+ ChargeCard.create(user_id: user_id, card_id: source,last_4: @carddetails.last4, exp_month: @carddetails.exp_month,exp_year: @carddetails.exp_year,card_type: @carddetails.brand)
 
   end
 

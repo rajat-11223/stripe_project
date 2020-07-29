@@ -6,6 +6,10 @@ Rails.application.routes.draw do
         passwords: 'users/passwords'
       }
 
+post "refund_popup" => "donations#refund_popup"
+post "refund_donation" => "donations#refund_donation"
+post "proceed_donation" => "donations#proceed_donation"
+post "submit_donation" => "donations#submit_donation"
 
 
    root to: "donations#index"

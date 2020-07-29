@@ -28,11 +28,12 @@
 
 
 <%= form_with(model: donation, local: true,id: "payment-form") do |f| %>
-<!-- <form action="/charge" method="post" id="payment-form"> -->
+ <!-- <form id="payment-form"> -->
   
    <div class="form-group pd-row">
     <span class="dollar">$</span>
-   <%= f.text_field :amount,placeholder: "Amount", maxlength:"5", onkeypress: "return isNumber(event)",required: "true" %>
+   <%#= f.text_field :amount,placeholder: "Amount", maxlength:"5", onkeypress: "return isNumber(event)",required: "true" %>
+   <input type="text" id="donation_amount" onkeypress= "return isNumber(event)" required= "true" maxlength="5" >
 </div>
   <div class="form-row">
     
@@ -41,9 +42,26 @@
     <div id="card-element">
       <!-- A Stripe Element will be inserted here. -->
     </div>
+    
 
     
   </div>
+
+  <div class="container">
+      <div class="row  mt-3 mb-2">
+ <div class="col-md-6">  
+ <div id="expiry-errors" role="alert"></div>     
+<div id="expiry">
+</div>
+</div>
+<div class="col-md-6">
+  <div id="cardcvc-errors" role="alert"></div>
+  <div id="cardcvc">
+</div>
+
+</div>
+</div>
+</div>
 
   <button class="sub_btnn">Pay Now</button>
 <!-- </form> -->
@@ -95,5 +113,5 @@ function isNumber(evt) {
 <script type="text/javascript">
   $(".close").click(function(){
   $(".flash_notification").hide();
-  
+  });
 </script>

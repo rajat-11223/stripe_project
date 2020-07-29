@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable
   belongs_to :master_role
   has_many :donations
+  has_many :charge_cards
 end
