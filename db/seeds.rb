@@ -12,3 +12,10 @@ puts "-------Started Adding Roles to table----"
 MasterRole.create(name:'admin')
 MasterRole.create(name:'user')
 puts "=--------Role Created Successfully------"
+
+
+#------------create Master Role------------#
+puts "-------Started Adding ADmin User to table----"
+User.create(name:'test user', email: "rajat+142@poplify.com", password:'12345678', password_confirmation: '12345678',master_role_id:'1')
+
+puts "=--------Role Created Successfully------"
