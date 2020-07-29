@@ -35,12 +35,12 @@ if params[:amount].present?
   @donation = Donation.new
   @amount = (params[:amount].to_i.round(2) * 100.to_i)
 
-# @intent = Stripe::PaymentIntent.create(
-            
-#             :amount      => @amount.to_i,
-#             :description => 'One-time Donation',
-#             :currency    => 'usd'
-#             ) 
+ @intent = Stripe::PaymentIntent.create(
+           
+             :amount      => @amount.to_i,
+             :description => 'One-time Donation',
+             :currency    => 'usd'
+             ) 
 
 #byebug
 

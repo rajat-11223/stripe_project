@@ -32,7 +32,7 @@
    <input type="text" id="donation_amount" onkeypress= "return isNumber(event)" required= "true" maxlength="5" >
 </div>
 <div class="col-md-12 text-center">
-<cenetr><button  class="btn btn-primary submt_btun">Proceed to Payment</button></cenetr>
+<cenetr><button  class="btn btn-primary submt_btun ">Proceed to Payment</button></cenetr>
 </div>
 </div>
 </div>
@@ -43,7 +43,150 @@
 </div>
 
 <script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript">
+// Create a Stripe client.
 
+
+$(document).ready(function(){
+var stripe = Stripe('pk_test_8aNH9uOjNiKBIYbS8oJe9WWu');
+document.querySelector(".sub_btnn").disabled = true;
+// Create an instance of Elements.
+var elements = stripe.elements();
+
+// Custom styling can be passed to options when creating an Element.
+// (Note that this demo uses a wider set of styles than the guide below.)
+var style = {
+  base: {
+    color: '#32325d',
+    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+    fontSmoothing: 'antialiased',
+    fontSize: '16px',
+    '::placeholder': {
+      color: '#aab7c4'
+    }
+  },
+  invalid: {
+    color: '#fa755a',
+    iconColor: '#fa755a'
+  }
+};
+
+// Create an instance of the card Element.
+var card = elements.create('card', {style: style});
+// var cardNumberElement = elements.create('cardNumber', {
+// style: style
+// });
+
+// cardNumberElement.mount('#card-element');
+
+// var cardExpiry = elements.create('cardExpiry', {
+// style: style
+// });
+// cardExpiry.mount('#expiry');
+
+// var cardCvc = elements.create('cardCvc', {
+// style: style
+// });
+// cardCvc.mount('#cardcvc');
+
+
+
+// Add an instance of the card Element into the `card-element` <div>.
+card.mount('#card-element');
+
+// Handle real-time validation errors from the card Element.
+card.on('change', function(event) {
+	 document.querySelector(".sub_btnn").disabled = event.empty;
+  var displayError = document.getElementById('card-errors');
+  if (event.error) {
+    displayError.textContent = event.error.message;
+    document.querySelector(".sub_btnn").disabled = event.error.message;
+  } else {
+    displayError.textContent = '';
+  }
+});
+
+// cardExpiry.on('change', function(event) {
+// 	 document.querySelector(".sub_btnn").disabled = event.empty;
+//   var displayError = document.getElementById('card-errors');
+//   if (event.error) {
+//     displayError.textContent = event.error.message;
+//     document.querySelector(".sub_btnn").disabled = event.error.message;
+//   } else {
+//     displayError.textContent = '';
+//   }
+// });
+
+// cardCvc.on('change', function(event) {
+// 	 document.querySelector(".sub_btnn").disabled = event.empty;
+//   var displayError = document.getElementById('card-errors');
+//   if (event.error) {
+//     displayError.textContent = event.error.message;
+//     document.querySelector(".sub_btnn").disabled = event.error.message;
+//   } else {
+//     displayError.textContent = '';
+//   }
+// });
+
+// Handle form submission.
+var form = document.getElementById('payment-form');
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  stripe.createToken(card).then(function(result) {
+    if (result.error) {
+      // Inform the user if there was an error.
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+    } else {
+    
+  
+
+    	console.log(card.cardNumber);
+            
+           // var cardnm = $('#payment_intent_client_secret').val();
+           // console.log(result.token.card);
+
+    	//var mycardnumber = document.getElementsByName('cardnumber');
+    	//console.log(cardnumber);
+      // Send the token to your server.
+
+      stripeTokenHandler(result.token);
+    }
+  });
+});
+
+
+
+});
+// Submit the form with the token ID.
+function stripeTokenHandler(token) {
+  var $form = $('#payment-form');
+  // Insert the token ID into the form so it gets submitted to the server
+  var form = document.getElementById('payment-form');
+  //var mycardnumber = document.getElementsByName('cardnumber');
+  //console.log(cardnumber);
+  var hiddenInput = document.createElement('input');
+  hiddenInput.setAttribute('type', 'hidden');
+  hiddenInput.setAttribute('name', 'stripeToken');
+  hiddenInput.setAttribute('value', token.id);
+  form.appendChild(hiddenInput);
+ // var cardElement = elements.getElement('card');
+     // console.log(cardElement);
+  var alldata = $form.serialize();
+  $.ajax({
+      url: '<%= donations_path %>',
+      method: 'post',
+      data: alldata+"&card_id="+ token.card.id
+    });
+
+  // Submit the form
+ // form.submit();
+}
+
+
+
+</script>
 <script type="text/javascript">
   
 $(document).ready(function(){
@@ -73,6 +216,7 @@ else
 {
 
   $(".error").addClass("dis_none");
+  $(".submt_btun").attr('disabled','disabled');
   $.ajax({
   	beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
     type:'post',

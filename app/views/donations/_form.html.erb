@@ -1,81 +1,4 @@
-<div class="container">
-<div class="row">
-<div class= "col-md-3"></div>
-<div class= "col-md-6">
- <div class="border_donation">
- <h4 class="text-center text-black mt-3">Make Donation</h4> 
-<h5 class="text-center text-black "> Welcome <%= current_user.name.capitalize %></h5>
-   <div class="container-fluid">
-    <div class="row price_btns">
-    
-      <button class="btn text-white bg-blue fbutton" type="text">$10</button>
-    
-      <button class="btn text-white bg-blue fbutton" type="text">$15</button>
-   
-      <button class="btn text-white bg-blue fbutton" type="text">$20</button>
-    
-      <button class="btn text-white bg-blue fbutton" type="text">$25</button>
-    
-    </div>
-  </div>
- 
-<!-- <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-  data-key="pk_test_8aNH9uOjNiKBIYbS8oJe9WWu"
-  data-description="A month's subscription"
-  data-amount="100"
-  data-locale="auto"></script> -->
-
-
-
-<%= form_with(model: donation, local: true,id: "payment-form") do |f| %>
- <!-- <form id="payment-form"> -->
-  
-   <div class="form-group pd-row">
-    <span class="dollar">$</span>
-   <%#= f.text_field :amount,placeholder: "Amount", maxlength:"5", onkeypress: "return isNumber(event)",required: "true" %>
-   <input type="text" id="donation_amount" onkeypress= "return isNumber(event)" required= "true" maxlength="5" >
-</div>
-  <div class="form-row">
-    
-<!-- Used to display form errors. -->
-    <br><div id="card-errors" role="alert"></div>
-    <div id="card-element">
-      <!-- A Stripe Element will be inserted here. -->
-    </div>
-    
-
-    
-  </div>
-
-  <div class="container">
-      <div class="row  mt-3 mb-2">
- <div class="col-md-6">  
- <div id="expiry-errors" role="alert"></div>     
-<div id="expiry">
-</div>
-</div>
-<div class="col-md-6">
-  <div id="cardcvc-errors" role="alert"></div>
-  <div id="cardcvc">
-</div>
-
-</div>
-</div>
-</div>
-
-  <button class="sub_btnn">Pay Now</button>
-<!-- </form> -->
-<% end %>
-
-    </div>
-</div>
-<div class= "col-md-3"></div>
-
-
-
-</div>
-
-</div>
+<!-- 
 
 
 
@@ -114,4 +37,4 @@ function isNumber(evt) {
   $(".close").click(function(){
   $(".flash_notification").hide();
   });
-</script>
+</script> -->
