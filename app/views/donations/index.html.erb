@@ -62,6 +62,7 @@
         
         <!-- Modal body -->
         <div class="modal-body">
+          <div class="refund_status"></div>
           <%= form_tag refund_donation_path, remote: :true do %>
          <%#= @refund_donation.amount %>
          <%= hidden_field_tag :charge_id %>

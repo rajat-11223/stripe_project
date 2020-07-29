@@ -68,13 +68,8 @@ def cretae
   customer = Stripe::Customer.create(email: current_user.email )
   Stripe::PaymentIntent.update(params[:payment_id],customer: customer.id,)
   @intent = Stripe::PaymentMethod.retrieve(params[:payment_method]) 
-  puts @intent
+  
 
-# if @intent.status == "requires_confirmation"
-
-#     Stripe::PaymentIntent.confirm(@intent.id,{payment_method: @intent.payment_method})
-# end 
-   #byebug  
     @donation = Donation.new(user_id: current_user.id,amount: amount,charge_id: params[:payment_id])
     
     respond_to do |format|
@@ -135,32 +130,40 @@ end
   end  
 
   def refund_donation
-#byebug
+    #byebug
    if params[:amount].present? && params[:charge_id].present?
-begin
-  @refund = Stripe::Refund.create({
-    amount: params[:amount].to_i.round(2) * 100.to_i,
-    payment_intent: params[:charge_id]
-  })
+      begin
+        @refund = Stripe::Refund.create({
+          amount: params[:amount].to_i.round(2) * 100.to_i,
+          payment_intent: params[:charge_id]
+        })
+          
+      rescue Stripe::InvalidRequestError, 
+             Stripe::AuthenticationError,
+             Stripe::APIConnectionError,
+             Stripe::StripeError => e
+             @message = e.message
+          
+      end   
+          
 
-rescue Stripe::CardError => e 
-   if  e.message.present?
-   
-     respond_to do |format|
-      @messge = e.message
-        format.js   { render 'alert.js.erb' }
-     end
-    
-    else 
-    respond_to do |format|
-     @messge = "amount has been refunded "
-        format.js   { render 'alert.js.erb' }  
-    
-    end 
-  end
-end
-end
-
+          respond_to do |format|
+            if  @message.present? 
+          
+             @display_message = @message
+            @myclass = 'refund_error'
+            format.js   { render 'alert.js.erb' }
+           else
+             
+             @myclass = 'refund_success'
+             #@display_message = "amount has been refunded "
+             format.html { redirect_to root_url, notice: 'Amount has been refunded successfully ' }
+           end
+          end  
+        
+        
+       
+    end
   end  
 
   # DELETE /donations/1

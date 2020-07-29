@@ -342,6 +342,13 @@ a{
   text-decoration:none;
   color:#2c7715;
 }
+
+.refund_error {
+  color: red;
+}
+.refund_success {
+  color: green;
+} 
     
 .mg_border {
 	border: 1px solid;
